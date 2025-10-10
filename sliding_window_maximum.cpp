@@ -1,0 +1,74 @@
+
+    // STORY BASED CODE :
+
+    // step1 : if my front of the deque is out of my window , why to store it? , so i remove in that case
+
+    // step2 : In the iteration if curr element is > deque's back , then whats the use of those smaller elements , Im looking 
+    //         for max element in the window right , so i remove all of them.
+
+    // step3 : if my curr element is smaller than deque's back then its ok , why? because this smaller element can be or may be
+    //         the max element in future windows im looking , so its fine , i push elements 
+
+    //         IN CODE : dq.push_back(i);
+
+    // step4 : after my i pointer touches / crosses the k-1 element in my arr , from that point i will be getting a maximum , in every
+    //         iteration after that point , 
+
+    //         IN CODE : if(i>=k-1)
+
+            
+
+    // TIME COMPLEXITY : outer for loop takes o of n , In inner while loop i push and pops out at max of all elements overall for the
+    //                   total iteration not for every iteration , so its another o of n and i add both 
+    //                   tc : o(2n)
+    
+    // SPACE COMPLEXITY : if the arr is strictly decreasing then in a window of size k , i store all k ele in the deque after that 
+    //                    i remove one and add one so its o of k at max
+    //                    sc : o(k)
+
+
+
+    // NOTES : i know that whenever i encounter a larger ele , im removing all smaller elements , so that larger ele always stays
+    //         at the front of the deque , its the sign of monotonic decreasing
+
+    //         in the step4 i need the maximum of that window so max ele always stays at the front of the deque , so i push them
+    //         into my res list
+
+    //         REM that deque stores the indexes not the actual elements , why? , see in the first step i pop out the element which
+    //         is out of my window , how do i pop it out if i have an actual element , in that case i should req that element index.
+
+
+    CODE :
+    
+    class Solution {
+    public:
+    
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        int n = nums.size();
+        deque<int>dq;
+        vector<int>res;
+
+        for(int i = 0;i<n;i++)
+        {
+            while(!dq.empty() && dq.front()<= i - k)
+            {
+                dq.pop_front();
+            }
+
+            while(!dq.empty() && nums[i] > nums[dq.back()])
+            {
+                dq.pop_back();
+            }
+
+            dq.push_back(i);
+
+            if(i>=k-1)
+            {
+                res.push_back(nums[dq.front()]);
+            }
+
+        }
+
+        return res;
+    }
+};
